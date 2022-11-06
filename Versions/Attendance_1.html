@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance 1</title>   
+    <link rel="stylesheet" href="../style.css">
+    <script src="../JavaScript/fileSaver.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+</head>
+<body>
+    <h1>Attendance</h1>
+    <div class="data" id="data">
+        <!-- <div class="tab">
+                <p><span>Roll Number :</span> 20911A3594</p>
+                <p><span>Name :</span> Katta Ruthvik</p>
+            <div class="attendance">
+                <div id="94L" class="left" is-present="none"><p>P<span>resent</span></p></div>
+                <div id="94R" class="right"><p>A<span>bsent</span></p></div>
+            </div> 
+        </div> -->
+    </div> 
+    <div class="features">
+        <div>
+            <label for="display" id="Details">Details : </label>
+            <textarea readonly id="display" rows="6" cols="40" style="resize: none;"></textarea>
+            <div id="copy" class="copy">
+                <img src="https://img.icons8.com/material-outlined/48/null/copy.png" width="15px" />
+            </div>
+        </div>
+        <div class="select-subject">
+            <label for="subject" style="margin-bottom:5px;"><b>Select Subject</b></label>
+            <select id="subject">
+              <option></option>
+              <option value="JP">JP</option>
+              <option value="OS">OS</option>
+              <option value="MEFA">MEFA</option>
+              <option value="FLAT">FLAT</option>
+              <option value="IDS">IDS</option>
+              <option value="ACS">ACS</option>
+              <option value="QMLR">QMLR</option>
+            </select>
+        </div>
+        <div class="buttons">
+            <button class="presentees" onclick="GetPresentees()">Get Presentees</button>
+            <button class="absentees" onclick="GetAbsentees()">Get Absentees</button>
+            <button id="reset">Reset</button>
+            <button class="Whatsapp"><img src="https://img.icons8.com/color/48/000000/whatsapp--v1.png" width="30px"/> Whatsapp</button>
+            <button id="Download"><img src="https://img.icons8.com/fluency/48/null/microsoft-excel-2019.png" width="23px"/>Download As Excel</button>
+        </div>
+    </div>
+    <script src="../JavaScript/Functions.js"></script>
+    <script type="module" src="../JavaScript/script.js"></script>
+</body>
+</html>
