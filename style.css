@@ -147,12 +147,6 @@ h1 {
     border: 2px solid lightgray;
     border-radius: 10px;
     padding: 4px;
-    cursor: pointer;
-}
-
-.features div .copy::selection{
-    background-color: none;
-    color: none;
 }
 
 .features div .copy:hover {
