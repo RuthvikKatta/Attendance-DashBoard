@@ -1,6 +1,6 @@
 // Attendance
-var str = '';
-var day = '';
+var msg = '';
+var time = '';
 
 // Function Display()
 
@@ -9,6 +9,7 @@ function display() {
     var str2 = '';
     var count1 = 0;
     var count2 = 0;
+    msg = '';
     var present = document.getElementsByClassName('left');
     for (let one of present) {
         if (one.getAttribute("is-present") === 'true') {
@@ -21,60 +22,63 @@ function display() {
         }
     }
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    let currentDate = new Date().toLocaleDateString("en-US", options);
-    var str = currentDate + '\n';
+    var currentDate = new Date().toLocaleDateString("en-US", options);
+    msg += currentDate + '\n';
     if (count1 == 1)
-        str += "Presentees (" + count1 + "  Member)\n";
+        msg += "Presentees (" + count1 + "  Member)\n";
     else
-        str += "Presentees (" + count1 + "  Members)\n";
-    str += str1 + '\n';
+        msg += "Presentees (" + count1 + "  Members)\n";
+    msg += str1 + '\n';
     if (count2 == 1)
-        str += "Absentees (" + count2 + "  Member)\n";
+        msg += "Absentees (" + count2 + "  Member)\n";
     else
-        str += "Absentees (" + count2 + "  Members)\n";
-    str += str2 + '\n';
+        msg += "Absentees (" + count2 + "  Members)\n";
+    msg += str2 + '\n\n';
+    var min = new Date().getMinutes();
     switch (new Date().getHours()) {
         case 9:
-            day = "In First Hour.";
+            time = "In First Hour.";
             break;
         case 10:
-            day = "In Second Hour.";
+            time = "In Second Hour.";
             break;
         case 11:
-            day = "In Third Hour.";
+            time = "In Third Hour.";
             break;
         case 12:
-            day = "In Fourth Hour.";
+            time = "In Fourth Hour.";
             break;
-        case 14:
-            day = "In Fifth Hour.";
+        case (min >= 45 && 13):
+            time = "In Fifth Hour.";
             break;
-        case 15:
-            day = "In Sixth Hour.";
+        case (min >= 45 && 14):
+            time = "In Sixth Hour.";
             break;
     }
-    str += day;
-    document.getElementById('display').value = str;
 
     //Display Border colour 
+
     if (count1 > count2)
         document.getElementById('display').style.borderColor = 'lightgreen';
     else if (count1 < count2)
         document.getElementById('display').style.borderColor = '#ff5c5c';
+    else if (count1 == 0 && count2 == 0)
+        document.getElementById('display').style.borderColor = 'rgb(165, 165, 165)';
     else
         document.getElementById('display').style.borderColor = '#f6f672';
-
+    msg += time;
+    document.getElementById('display').value = msg;
 }
 
 // Presentees Function
 
 function GetPresentees() {
     var present = document.getElementsByClassName('left');
-    str = '';
+    msg = '';
     var count = 0;
     for (let one of present) {
         if (one.getAttribute("is-present") === 'true') {
-            str = str + one.id.substring(0, 2) + ', ';
+            msg = msg + one.id.substring(0, 2) + ', ';
             count += 1;
         }
         else {
@@ -91,11 +95,11 @@ function GetPresentees() {
         document.getElementById('Details').textContent = "Presentees : " + count + ' Member';
     else
         document.getElementById('Details').textContent = "Presentees : " + count + ' Members';
-    if (str === '') {
+    if (msg === '') {
         document.getElementById('display').value = "No Presentees";
         return;
     }
-    str = str.slice(0, -2);
+    msg = msg.slice(0, -2);
     let select = document.getElementById("subject");
     subject = select.value;
     select.addEventListener('change', event => {
@@ -103,20 +107,20 @@ function GetPresentees() {
     })
 
     let currentDate = new Date().toJSON().slice(0, 10);
-    str += " Were Present on " + currentDate + " in " + subject + " Class."
+    msg += " are Present on " + currentDate + " in " + subject + " Class."
 
-    document.getElementById('display').value = str;
+    document.getElementById('display').value = msg;
 }
 
 // Absentees Function 
 
 function GetAbsentees() {
     var present = document.getElementsByClassName('left');
-    str = '';
+    msg = '';
     var count = 0;
     for (let one of present) {
         if (one.getAttribute("is-present") === 'false') {
-            str = str + one.id.substring(0, 2) + ', ';
+            msg = msg + one.id.substring(0, 2) + ', ';
             count += 1;
         }
         else {
@@ -133,11 +137,11 @@ function GetAbsentees() {
         document.getElementById('Details').textContent = "Absentees : " + count + ' Member';
     else
         document.getElementById('Details').textContent = "Absentees : " + count + ' Members';
-    if (str === '') {
+    if (msg === '') {
         document.getElementById('display').value = "No Absentees";
         return;
     }
-    str = str.slice(0, -2);
+    msg = msg.slice(0, -2);
 
     let select = document.getElementById("subject");
     subject = select.value;
@@ -146,23 +150,25 @@ function GetAbsentees() {
     })
 
     let currentDate = new Date().toJSON().slice(0, 10);
-    str += " Were Absent on " + currentDate + " in " + subject + " Class."
+    msg += " are Absent on " + currentDate + " in " + subject + " Class."
 
-    document.getElementById('display').value = str;
+    document.getElementById('display').value = msg;
 }
 
 // Whatsapp Message sender Function
 
 document.querySelector(".Whatsapp").addEventListener('click', function () {
-    window.open(`whatsapp://send?text=${str}`);
+    window.open(`whatsapp://send?text=${msg}`);
 })
 
 // Copy Function
 
 let copy = document.querySelector("#copy");
 copy.addEventListener('click', function () {
-    let input = document.querySelector("#display").select();
-    document.execCommand("copy");
+    let input = document.querySelector("#display");
+    input.select();
+    input.setSelectionRange(0, 9999);
+    navigator.clipboard.writeText(input.value);
     copy.classList.add("active");
     window.getSelection().removeAllRanges();
     setTimeout(function () {
@@ -172,7 +178,7 @@ copy.addEventListener('click', function () {
 
 // Reset Function
 
-document.getElementById("reset").addEventListener('click',function(){
+document.getElementById("reset").addEventListener('click', function () {
     var present = document.getElementsByClassName('left');
     for (let one of present) {
         var leftID = one.id;
